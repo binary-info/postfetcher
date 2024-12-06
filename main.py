@@ -19,4 +19,4 @@ async def root():
 
 if __name__=="__main__":
     print(" --- Welcome to App ---")
-    uvicorn.run(app, host="13.60.92.165", port=8502)
+    uvicorn.run(app, host="13.60.92.165", port=8501)
