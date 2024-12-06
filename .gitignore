@@ -1,0 +1,81 @@
+# Python-related ignores
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.env
+.env.*
+
+# Byte-compiled / optimized / compiled files
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.spec
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Logs and debugging
+*.log
+*.out
+*.err
+logs/
+debug.log
+
+# Local IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# FastAPI specific
+staticfiles/
+mediafiles/
+
+# Docker-related
+docker-compose.override.yml
+.dockerignore
+*.tar
+
+# Heroku-related
+*.sqlite3
+*.pyc
+*.pyo
+*.pyd
+
+# Testing
+.coverage
+.tox/
+.cache/
+.nox/
+pytest_cache/
+htmlcov/
+
+# Ignore environment configuration files
+.envrc
+*.ini
+*.yaml
+*.toml
+
+# Ignore migration files (if using SQLAlchemy or Alembic migrations)
+migrations/
+alembic/
+
+# Ignore secrets
+keys.json
+secrets/
