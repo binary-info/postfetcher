@@ -1,0 +1,1 @@
+web: gunicorn facebook_instagram_tool.wsgi
