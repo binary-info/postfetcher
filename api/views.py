@@ -81,12 +81,13 @@ class StoryDownloadView(APIView):
         try:
             # Call the story downloading function
             story_detail = download_instagram_stories(username=username, url=url)
+            return Response(story_detail)
             # Serialize the response
-            serializer = StoryDownloadResponseSerializer(data=story_detail, many=True)
-            if serializer.is_valid():
-                return Response(serializer.data)
-            else:
-                return Response(serializer.errors, status=400)
+            # serializer = StoryDownloadResponseSerializer(data=story_detail, many=True)
+            # if serializer.is_valid():
+            #     return Response(serializer.data)
+            # else:
+            #     return Response(serializer.errors, status=400)
         except APIException as api_exception:
             return Response({"error": str(api_exception)}, status=400)
         except Exception as e:
@@ -101,13 +102,14 @@ class HighlightDownloadView(APIView):
         url = request.query_params.get('url')
         try:
             # Call the story downloading function
-            story_detail = download_highlight(username=username, url=url)
+            highlight_detail = download_highlight(username=username, url=url)
+            return Response(highlight_detail)
             # Serialize the response
-            serializer = HighlightsDownloadResponseSerializer(data=story_detail, many=True)
-            if serializer.is_valid():
-                return Response(serializer.data)
-            else:
-                return Response(serializer.errors, status=400)
+            # serializer = HighlightsDownloadResponseSerializer(data=story_detail, many=True)
+            # if serializer.is_valid():
+            #     return Response(serializer.data)
+            # else:
+            #     return Response(serializer.errors, status=400)
         except APIException as api_exception:
             return Response({"error": str(api_exception)}, status=400)
         except Exception as e:

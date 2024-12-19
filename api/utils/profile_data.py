@@ -64,6 +64,7 @@ def fetch_instagram_profile(username: str, url: str):
                 {
                     # "username": profile_data.username,
                     # "full_name": profile_data.full_name,
+                    # "profile_id":profile_data.userid,
                     "media_url": str(filename)
                 }
             ]

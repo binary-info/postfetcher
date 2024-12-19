@@ -1,7 +1,7 @@
-import json
+import json, instaloader
 from playwright.sync_api import sync_playwright
 from django.conf import settings
-from api.models import UserSession
+# from api.models import UserSession
 
 def login_data(username, password):
     """
@@ -33,6 +33,7 @@ def login_data(username, password):
                 json.dump(cookies, file)
             
             user_agent = page.evaluate("navigator.userAgent")
+
             # save_data = UserSession(username=username,cookies=cookies,user_agent=user_agent)
             # save_data.save()
             browser.close()
