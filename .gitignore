@@ -17,6 +17,8 @@ venv/
 env/
 ENV/
 node_modules/
+sessions/
+sessions_file/
 
 # Ignore pip environment files
 pip-log.txt
