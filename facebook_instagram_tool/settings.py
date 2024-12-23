@@ -26,6 +26,9 @@ SECRET_KEY = 'django-insecure-t4)5or0f*s$!ctzizswlb8ax12^n)3o2my6e3ag01su-yntbfs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+FACEBOOK_APP_ID = 'your_facebook_app_id' # Need to be changed with real app id from metra API
+FACEBOOK_APP_SECRET = 'your_facebook_app_secret' # Need to be changed with real app secret from metra API
+
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -40,6 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api',
+    'facebook_apis',
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +63,7 @@ ROOT_URLCONF = 'facebook_instagram_tool.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'frontend/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,7 +131,8 @@ CORS_EXPOSE_HEADERS = ['Content-Type', 'Authorization']
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "frontend/static"]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -22,7 +22,7 @@ def login_data(username, password):
             page.click("button[type='submit']")
 
             print("Waiting for redirection...")
-            page.wait_for_timeout(15000)
+            page.wait_for_timeout(20000)
 
             if "login" in page.url:
                 raise Exception("Login failed, incorrect credentials or blocked.")
@@ -32,7 +32,7 @@ def login_data(username, password):
             with open(session_file, "w") as file:
                 json.dump(cookies, file)
             
-            user_agent = page.evaluate("navigator.userAgent")
+            # user_agent = page.evaluate("navigator.userAgent")
 
             # save_data = UserSession(username=username,cookies=cookies,user_agent=user_agent)
             # save_data.save()

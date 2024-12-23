@@ -1,7 +1,8 @@
 from pathlib import Path
 import instaloader
-import json
+import json, shutil
 from django.conf import settings
+from django.http import HttpRequest
 
 def load_instaloader_session(username):
     """
@@ -11,46 +12,43 @@ def load_instaloader_session(username):
     session_file = session_dir / f"instagram_cookies_{username}.json"
     try:
         loader = instaloader.Instaloader()
-
-        # Load session cookies from JSON file
         with open(session_file, "r") as file:
             cookies = {cookie["name"]: cookie["value"] for cookie in json.load(file)}
-
         loader.load_session(username=username, session_data=cookies)
-        print(f"Session loaded successfully for {username}.")
         return loader
-    except FileNotFoundError:
-        print("Session file not found. Please ensure you have logged in and saved cookies.")
-        raise
-    except Exception as e:
-        print(f"Error loading session: {e}")
-        raise
+    except FileNotFoundError as e:
+        raise e
+    except Exception as exception:
+        raise exception
 
-def download_instagram_reel(username: str, reel_url: str):
+def download_instagram_reel(request: HttpRequest, username: str, url: str):
     """
-    Downloads a single Instagram reel using Instaloader.
+    Downloads a single Instagram reel using Instaloader and renames the file.
     """
     try:
-        # Initialize Instaloader
         loader = load_instaloader_session(username)
-        
-        reel_shortcode = reel_url.split("/")[-2]
-        
+        reel_shortcode = url.split("/")[-2]
         reel = instaloader.Post.from_shortcode(loader.context, reel_shortcode)
-        
-        target_dir = Path(settings.MEDIA_ROOT) / 'downloads' / 'reel'
-        target_dir.mkdir(exist_ok=True)
+        target_dir = Path(settings.MEDIA_ROOT) / 'downloads' / 'reel' / reel_shortcode
+        if target_dir.exists():
+            shutil.rmtree(target_dir)
+        target_dir.mkdir(parents=True, exist_ok=True)
         loader.download_post(reel, target=target_dir)
-        
-        
-        post_details = [{
-            # "username": reel.owner_username,
-            # "reel_url": reel_url,
-            # "shortcode": reel.shortcode,
-            # "caption": reel.caption or "No caption",
-            "media_url": [str(f) for f in target_dir.iterdir() if f.suffix in [".mp4"]]
-        }]
-        return post_details
+        renamed_file = None
+        for file in target_dir.iterdir():
+            if file.suffix == ".mp4":
+                new_name = f"{reel_shortcode}.mp4"
+                new_file_path = target_dir / new_name
+                file.rename(new_file_path)
+                media_url = request.build_absolute_uri(f'/media/downloads/reel/{reel_shortcode}/{new_file_path.name}')
+                renamed_file = media_url
+        if renamed_file:
+            post_details = {
+                "media_url": renamed_file
+            }
+            return post_details
+        else:
+            raise FileNotFoundError("Reel file (.mp4) not found in the download directory.")
     except Exception as e:
         print(f"An error occurred while downloading the reel: {e}")
         raise

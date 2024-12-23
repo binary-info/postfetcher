@@ -1,4 +1,4 @@
-from api.serializers import *
+from api.serializers import LoginRequestSerializer
 from api.utils.login import login_data
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,11 +10,16 @@ from api.utils.download_highlights import download_highlight
 from api.utils.download_posts import download_instagram_post
 from api.utils.download_reels import download_instagram_reel
 from api.utils.download_stories import download_instagram_stories
+from pathlib import Path
+from django.conf import settings
+import os
 
 # Create your views here.
 
 class LoginView(APIView):
     def post(self, request):
+        data = request.data
+        print("Into login func.....", data)
         serializer = LoginRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data['username']
@@ -24,121 +29,78 @@ class LoginView(APIView):
             return Response({"message": "Login successful", "data": result})
         except Exception as e:
             raise APIException(str(e))
-
-class ProfileView(APIView):
+class InstaDownload(APIView):
+    
     def get(self, request):
         """
-        Asynchronous view for fetching Instagram profile info.
+        Determines the appropriate download view based on the URL pattern in the query parameter.
         """
-        username = request.query_params.get('username')
         url = request.query_params.get('url')
+        username = request.query_params.get('username')
 
-        if not username or not url:
+        if not url or not username:
             raise APIException("Both 'username' and 'url' are required.")
 
         try:
-            # Properly await the asynchronous function
-            profile_info = fetch_instagram_profile(username, url)
-
-            # Return the response as a valid DRF Response object
-            return Response(profile_info)  # This ensures the response is properly formatted
+            if '/p/' in url:
+                return self.PostDownloadView(request, username, url)
+            elif '/reel/' in url:
+                return self.ReelDownloadView(request, username, url)
+            elif '/stories/' in url:
+                return self.StoryDownloadView(request, username, url)
+            elif '/s/' in url:
+                return self.HighlightDownloadView(request, username, url)
+            elif url:
+                return self.ProfileView(request, username, url)
+            else:
+                raise APIException("Unsupported URL format. Provide a valid Instagram post, reel, or story URL.")
+        except Exception as e:
+            raise APIException(f"An unexpected error occurred: {str(e)}")
+    
+    def ProfileView(self, request, username, url):
+        """
+        Asynchronous view for fetching Instagram profile info.
+        """
+        if not username or not url:
+            raise APIException("Both 'username' and 'url' are required.")
+        try:
+            profile_info = fetch_instagram_profile(request, username, url)
+            return Response(profile_info)
         except Exception as e:
             raise APIException(str(e))
-        
-class PostDownloadView(APIView):
-    def get(self, request):
-        username = request.query_params.get('username')
-        url = request.query_params.get('url')
+            
+    def PostDownloadView(self, request, username, url):
         try:
-            post_details = download_instagram_post(username=username, post_url=url)
+            post_details = download_instagram_post(request, username, url)
             return Response(post_details)
         except APIException as api_exception:
             return Response({"error": str(api_exception)}, status=400)
         except Exception as e:
             raise APIException(f"An unexpected error occurred: {str(e)}")
 
-class ReelDownloadView(APIView):
-    """
-    API view to download Instagram reels of a target user.
-    """
-    def get(self, request):
-        username = request.query_params.get('username')
-        url = request.query_params.get('url')
+    def ReelDownloadView(self, request, username, url):
         try:
-            reel_detail = download_instagram_reel(username=username, reel_url=url)
-            serializer = ReelDownloadResponseSerializer(reel_detail, many=True)
-            return Response(serializer.data)
+            reel_detail = download_instagram_reel(request, username, url)
+            return Response(reel_detail)
+        except APIException as api_exception:
+            return Response({"error": str(api_exception)}, status=400)
         except Exception as e:
-            raise APIException(str(e))
-        
-class StoryDownloadView(APIView):
-    """
-    API view to download Instagram stories of a target user.
-    """
-    def get(self, request):
-        username = request.query_params.get('username')
-        url = request.query_params.get('url')
+            raise APIException(f"An error occurred while downloading the post: {str(e)}")
+
+    def StoryDownloadView(self, request, username, url):
         try:
-            # Call the story downloading function
-            story_detail = download_instagram_stories(username=username, url=url)
+            story_detail = download_instagram_stories(request, username, url)
             return Response(story_detail)
-            # Serialize the response
-            # serializer = StoryDownloadResponseSerializer(data=story_detail, many=True)
-            # if serializer.is_valid():
-            #     return Response(serializer.data)
-            # else:
-            #     return Response(serializer.errors, status=400)
         except APIException as api_exception:
             return Response({"error": str(api_exception)}, status=400)
         except Exception as e:
             raise APIException(f"An unexpected error occurred: {str(e)}")
 
-class HighlightDownloadView(APIView):
-    """
-    API view to download Instagram highlights of a target user.
-    """
-    def get(self, request):
-        username = request.query_params.get('username')
-        url = request.query_params.get('url')
+    def HighlightDownloadView(self, request, username, url):
         try:
-            # Call the story downloading function
-            highlight_detail = download_highlight(username=username, url=url)
+            highlight_detail = download_highlight(request, username, url)
             return Response(highlight_detail)
-            # Serialize the response
-            # serializer = HighlightsDownloadResponseSerializer(data=story_detail, many=True)
-            # if serializer.is_valid():
-            #     return Response(serializer.data)
-            # else:
-            #     return Response(serializer.errors, status=400)
         except APIException as api_exception:
             return Response({"error": str(api_exception)}, status=400)
         except Exception as e:
             raise APIException(f"An unexpected error occurred: {str(e)}")
-
-class FolloweingsView(APIView):
-    def get(self, request):
-        try:
-            username = request.query_params.get('username')
-            url = request.query_params.get('url')
-            followings = get_followees(username, url)
-            return followings
-            # serializer = FolloweesResponseSerializer(followees, many=True)
-            # return Response(serializer.data)
-        except Exception as e:
-            raise APIException(str(e))
-        
-class FollowersView(APIView):
-    def get(self, request):
-        try:
-            username = request.query_params.get('username')
-            url = request.query_params.get('url')
-            followers = get_followers(username, url)
-            serializer = FollowersResponseSerializer(data=followers, many=True)
-            if serializer.is_valid():
-                return Response(serializer.data)
-            else:
-                return Response(serializer.errors, status=400)
-        except APIException as api_exception:
-            return Response({"error": str(api_exception)}, status=400)
-        except Exception as e:
-            raise APIException(f"An unexpected error occurred: {str(e)}")    

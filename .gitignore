@@ -1,10 +1,46 @@
-# Python
-__pycache__/
-*.py[cod]
-
-# Django
-db.sqlite3
+# Django specific files
 *.log
+*.pot
+*.pyc
+*.pyo
+__pycache__/
+db.sqlite3
+instance/
+media/
 
-# Environment
+# If you are using MySQL or PostgreSQL, ignore database dumps
+*.sql
+*.sqlite3
+
+# Ignore the virtual environment
+venv/
+env/
+ENV/
+node_modules/
+
+# Ignore pip environment files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore IDE/editor specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.swn
+*.swd
+
+# Ignore bytecode and system files
+.DS_Store
+Thumbs.db
+
+# Ignore static files if they are generated (e.g., with collectstatic)
+staticfiles/
+static/
+
+# Ignore local settings
+local_settings.py
+
+# Ignore environment variables
 .env

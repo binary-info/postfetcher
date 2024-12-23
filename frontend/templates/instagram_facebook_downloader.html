@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram & Facebook Downloader</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-gray-100 h-screen flex justify-center items-center">
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 justify-center items-center hidden">
+        <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+            <h2 class="text-xl font-bold text-center mb-4">Login to Instagram</h2>
+            <div>
+                <form method="post" id="loginForm">
+                    {% csrf_token %}
+                    <input type="text" name="username" class="w-full px-4 py-2 mb-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Username">
+                    <input type="password" name="password" class="w-full px-4 py-2 mb-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Password">
+                    <button id="loginBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none">
+                        Login to Instagram
+                    </button>
+                </form>
+            </div>
+            <button id="closeModal" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 mt-4 rounded focus:outline-none">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Main UI -->
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h1 class="text-2xl font-bold text-center mb-6">Instagram Downloader</h1>
+
+        <!-- Input Field -->
+        <div>
+            <label for="instagramLink" class="block text-gray-700 font-semibold mb-2">Paste Instagram Link</label>
+            <input type="text" id="instagramLink" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Paste link here">
+        </div>
+
+        <!-- Download Button -->
+        <button id="downloadBtn" class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none">
+            Download
+        </button>
+    </div>
+
+    <!-- Download Status -->
+    <div id="status" class="mt-4 text-center hidden">
+        <p class="text-gray-700 font-medium">Processing your download...</p>
+    </div>
+
+    <script src="{% static 'js/index.js' %}"></script>
+
+</body>
+</html>
