@@ -1,0 +1,71 @@
+------------------------------------------------- INSTAGRAM APIs -------------------------------------------------
+---------------- Login API ----------------
+METHOD: POST
+url: https://fast-mosquito-hugely.ngrok-free.app/api/auth/login
+body:
+{
+	"username":"your_username",
+	"password":"your_password"
+}
+
+RESPONSE: 200 OK
+{
+    "message": "Login successful",
+    "data": {
+        "status": "success",
+        "message": "Login successfull."
+    }
+}
+
+
+---------------- Download Instagram Post ----------------
+METHOD:	GET
+url: https://fast-mosquito-hugely.ngrok-free.app/api/download-post?username=your_username&url=paste_posts_or_reel_url
+RESPONSE: 200 OK
+[
+    {
+        "media_url": "download_path"
+    }
+]
+---------------- Download Instagram Reel ----------------
+METHOD: GET
+url: https://fast-mosquito-hugely.ngrok-free.app/api/download-reel?username=your_username&url=paste_reel_url
+RESPONSE: 200 OK
+
+[
+    {
+        "media_url": "download_path"
+     }
+]
+---------------- Download Instagram Stories ----------------
+METHOD: GET
+url: https://fast-mosquito-hugely.ngrok-free.app/api/download-story?username=your_username&url=paste_story_url
+RESPONSE: 200 OK
+
+[
+    {
+        "media_url": "download_path"
+    }
+]
+
+
+---------------- Download Instagram Profile Picture ----------------
+METHOD: GET
+url: https://fast-mosquito-hugely.ngrok-free.app/api/profile?username=your_username&url=url_of_instagram_profile
+RESPONSE: 200 OK
+{
+    "media_url": "profile_picture_url_for_download",
+}
+
+
+---------------- Download Highlights By Username ----------------
+METHOD: GET
+url: https://fast-mosquito-hugely.ngrok-free.app/api/download-highlight?username=your_username&url=url_of_instagram_profile
+RESPONSE: 200 OK
+[
+    {
+        "media_url": "download_path",
+    }
+]
+
+------------------------------------------------- FACEBOOK APIs -------------------------------------------------
