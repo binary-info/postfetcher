@@ -1,4 +1,6 @@
 ------------------------------------------------- INSTAGRAM APIs -------------------------------------------------
+
+
 ---------------- Login API ----------------
 METHOD: POST
 url: https://fast-mosquito-hugely.ngrok-free.app/api/auth/login
@@ -22,31 +24,27 @@ RESPONSE: 200 OK
 METHOD:	GET
 url: https://fast-mosquito-hugely.ngrok-free.app/api/download-post?username=your_username&url=paste_posts_or_reel_url
 RESPONSE: 200 OK
-[
-    {
-        "media_url": "download_path"
-    }
-]
+{
+    "media_url": "download_path"
+}
+
+
 ---------------- Download Instagram Reel ----------------
 METHOD: GET
 url: https://fast-mosquito-hugely.ngrok-free.app/api/download-reel?username=your_username&url=paste_reel_url
 RESPONSE: 200 OK
+{
+    "media_url": "download_path"
+}
 
-[
-    {
-        "media_url": "download_path"
-     }
-]
+
 ---------------- Download Instagram Stories ----------------
 METHOD: GET
 url: https://fast-mosquito-hugely.ngrok-free.app/api/download-story?username=your_username&url=paste_story_url
 RESPONSE: 200 OK
-
-[
-    {
-        "media_url": "download_path"
-    }
-]
+{
+    "media_url": "download_path"
+}
 
 
 ---------------- Download Instagram Profile Picture ----------------
@@ -62,10 +60,6 @@ RESPONSE: 200 OK
 METHOD: GET
 url: https://fast-mosquito-hugely.ngrok-free.app/api/download-highlight?username=your_username&url=url_of_instagram_profile
 RESPONSE: 200 OK
-[
-    {
-        "media_url": "download_path",
-    }
-]
-
-------------------------------------------------- FACEBOOK APIs -------------------------------------------------
+{
+    "media_url": "download_path",
+}

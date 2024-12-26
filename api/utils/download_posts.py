@@ -16,10 +16,10 @@ def load_instaloader_session(username):
             cookies = {cookie["name"]: cookie["value"] for cookie in json.load(file)}
         loader.load_session(username=username, session_data=cookies)
         return loader
-    except FileNotFoundError:
-        raise
+    except FileNotFoundError as file_exception:
+        raise file_exception
     except Exception as e:
-        raise
+        raise e
 
 def download_instagram_post(request: HttpRequest, username: str, url: str):
     """
@@ -55,4 +55,4 @@ def download_instagram_post(request: HttpRequest, username: str, url: str):
         return media_data
     except Exception as e:
         print(f"An error occurred while downloading the post: {e}")
-        raise
+        raise e

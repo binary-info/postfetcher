@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api',
-    'facebook_apis',
     'frontend',
 ]
 
